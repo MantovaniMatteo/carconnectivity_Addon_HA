@@ -2,7 +2,7 @@
 
 # Home Assistant Add-on: CarConnectivity
 
-Addon version of Carconnectivity made by Till (see https://github.com/tillsteinbach/CarConnectivity) throught MQTT
+Addon version of Carconnectivity made by Till (see https://github.com/tillsteinbach/CarConnectivity) throught MQTT 
 
 ## How to use
 
