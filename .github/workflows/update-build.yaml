@@ -1,0 +1,116 @@
+name: Update build.yaml on new submodule release
+
+on:
+  push:
+    branches:
+      - dependabot/submodules/** # Déclenché par Dependabot lors d'une mise à jour d'un sous-module
+  workflow_dispatch: # Permet de lancer manuellement l’action si nécessaire
+
+jobs:
+  update-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          submodules: true # Clone aussi les sous-modules
+
+      - name: Get latest versions of submodules
+        run: |
+          # SEAT
+          LATEST_SEAT_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-seatcupra.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_SEAT_VERSION=$LATEST_SEAT_VERSION" >> $GITHUB_ENV
+          
+          # SKODA
+          LATEST_SKODA_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-skoda.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_SKODA_VERSION=$LATEST_SKODA_VERSION" >> $GITHUB_ENV
+
+          # VOLKSWAGEN
+          LATEST_VW_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-volkswagen.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_VW_VERSION=$LATEST_VW_VERSION" >> $GITHUB_ENV
+
+          # TRONITY
+          LATEST_TRONITY_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-tronity.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_TRONITY_VERSION=$LATEST_TRONITY_VERSION" >> $GITHUB_ENV
+
+          # MQTT
+          LATEST_MQTT_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_MQTT_VERSION=$LATEST_MQTT_VERSION" >> $GITHUB_ENV
+
+          # MQTT Home Assistant
+          LATEST_MQTT_HOMEASSISTANT_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt_homeassistant.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
+          echo "LATEST_MQTT_HOMEASSISTANT_VERSION=$LATEST_MQTT_HOMEASSISTANT_VERSION" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        run: |
+          echo "### Changelog des mises à jour" > changelog.md
+          
+          echo "- **SEAT_VERSION** → \`${LATEST_SEAT_VERSION}\`" >> changelog.md
+          echo "- **SKODA_VERSION** → \`${LATEST_SKODA_VERSION}\`" >> changelog.md
+          echo "- **VOLKSWAGEN_VERSION** → \`${LATEST_VW_VERSION}\`" >> changelog.md
+          echo "- **TRONITY_VERSION** → \`${LATEST_TRONITY_VERSION}\`" >> changelog.md
+          echo "- **MQTT_VERSION** → \`${LATEST_MQTT_VERSION}\`" >> changelog.md
+          echo "- **MQTT_HOMEASSISTANT_VERSION** → \`${LATEST_MQTT_HOMEASSISTANT_VERSION}\`" >> changelog.md
+          echo "" >> changelog.md
+
+          echo "#### 📌 Modifications depuis la dernière version :" >> changelog.md
+
+          # Génération des logs pour chaque sous-module
+          echo "**SeatCupra** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-seatcupra.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+          echo "**Skoda** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-skoda.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+          echo "**Volkswagen** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-volkswagen.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+          echo "**Tronity** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-tronity.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+          echo "**MQTT** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+          echo "**MQTT HomeAssistant** :" >> changelog.md
+          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt_homeassistant.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
+
+      - name: Update build.yaml
+        run: |
+          echo "Mise à jour de build.yaml avec les nouvelles versions"
+          sed -i "s/SEAT_VERSION: .*/SEAT_VERSION: \"${LATEST_SEAT_VERSION}\"/" build.yaml
+          sed -i "s/SKODA_VERSION: .*/SKODA_VERSION: \"${LATEST_SKODA_VERSION}\"/" build.yaml
+          sed -i "s/VW_VERSION: .*/VW_VERSION: \"${LATEST_VW_VERSION}\"/" build.yaml
+          sed -i "s/TRONITY_VERSION: .*/TRONITY_VERSION: \"${LATEST_TRONITY_VERSION}\"/" build.yaml
+          sed -i "s/MQTT_VERSION: .*/MQTT_VERSION: \"${LATEST_MQTT_VERSION}\"/" build.yaml
+          sed -i "s/MQTT_HOMEASSISTANT_VERSION: .*/MQTT_HOMEASSISTANT_VERSION: \"${LATEST_MQTT_HOMEASSISTANT_VERSION}\"/" build.yaml
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git commit -am "Mise à jour des versions : SEAT, SKODA, VOLKSWAGEN, TRONITY, MQTT, MQTT_HOMEASSISTANT"
+          git push origin HEAD:update-versions-${LATEST_SEAT_VERSION}-${LATEST_SKODA_VERSION}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-versions-${LATEST_SEAT_VERSION}-${LATEST_SKODA_VERSION}
+          title: "Mise à jour des versions"
+          body: |
+            Automatiquement généré par GitHub Actions.
+
+            - **SEAT_VERSION** → `${LATEST_SEAT_VERSION}`
+            - **SKODA_VERSION** → `${LATEST_SKODA_VERSION}`
+            - **VW_VERSION** → `${LATEST_VW_VERSION}`
+            - **TRONITY_VERSION** → `${LATEST_TRONITY_VERSION}`
+            - **MQTT_VERSION** → `${LATEST_MQTT_VERSION}`
+            - **MQTT_HOMEASSISTANT_VERSION** → `${LATEST_MQTT_HOMEASSISTANT_VERSION}`
+
+            ---
+            ## Changelog 📜
+            $(cat changelog.md)
+          base: main
