@@ -20,6 +20,9 @@
 ## Introduction
 The **CarConnectivity-Addon** module allows you to connect and retrieve information about your vehicle from compatible manufacturers' online services. This guide explains how to properly configure the module.
 I am simply packaging the [excellent work done by Till.](https://github.com/tillsteinbach/CarConnectivity)
+This version is a reduced version of the Addon made by Pulpyyyy. It only includes the part for Seat/Cupra (https://github.com/Pulpyyyy/carconnectivity-addon)
+I thank Till and Pulpyyyy for the great work they have done.
+
 
 ## Add repository
 
