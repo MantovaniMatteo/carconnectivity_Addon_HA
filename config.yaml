@@ -22,18 +22,6 @@ options:
   connector_password_seatcupra: "password"
   connector_spin_seatcupra: "1234"
   connector_interval_seatcupra: 600
-  connector_username_skoda: ""
-  connector_password_skoda: "password"
-  connector_spin_skoda: "1234"
-  connector_interval_skoda: 600
-  connector_username_vw: ""
-  connector_password_vw: "password"
-  connector_spin_vw: "1234"
-  connector_interval_vw: 600
-  connector_username_trionity: ""
-  connector_password_trionity: "password"
-  connector_spin_trionity: "1234"
-  connector_interval_trionity: 600
   mqtt_username: "mqtt"
   mqtt_password: "passwordmqtt"
   mqtt_broker: "core-mosquitto.local.hass.io"
@@ -47,18 +35,6 @@ schema:
   connector_password_seatcupra: password?
   connector_interval_seatcupra: int(60,3600)?
   connector_spin_seatcupra: match(^\d{4}$)?
-  connector_username_skoda: match(^$|^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$)
-  connector_password_skoda: password?
-  connector_interval_skoda: int(60,3600)?
-  connector_spin_skoda: match(^\d{4}$)?
-  connector_username_vw: match(^$|^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$)
-  connector_password_vw: password?
-  connector_interval_vw: int(60,3600)?
-  connector_spin_vw: match(^\d{4}$)?
-  connector_username_trionity: match(^$|^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$)
-  connector_password_trionity: password?
-  connector_interval_trionity: int(60,3600)?
-  connector_spin_trionity: match(^\d{4}$)?
   mqtt_username: str?
   mqtt_password: password?
   mqtt_broker: str

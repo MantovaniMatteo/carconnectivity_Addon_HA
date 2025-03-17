@@ -18,48 +18,6 @@
                 }
             }
             {{- end }}
-            {{- if .connector_username_skoda }}
-            {{- if not $first }},{{ end }}
-            {{- $first = false }}
-            {
-                "type": "skoda",
-                "config": {
-                    "username": "{{ .connector_username_skoda }}",
-                    "password": "{{ .connector_password_skoda }}",
-                    "interval": {{ .connector_interval_skoda }},
-                    "spin": "{{ .connector_spin_skoda }}",
-                    "api_log_level": "{{ .api_log_level }}"
-                }
-            }
-            {{- end }}
-            {{- if .connector_username_vw }}
-            {{- if not $first }},{{ end }}
-            {{- $first = false }}
-            {
-                "type": "vw",
-                "config": {
-                    "username": "{{ .connector_username_vw }}",
-                    "password": "{{ .connector_password_vw }}",
-                    "interval": {{ .connector_interval_vw }},
-                    "spin": "{{ .connector_spin_vw }}",
-                    "api_log_level": "{{ .api_log_level }}"
-                }
-            }
-            {{- end }}
-            {{- if .connector_username_trionity }}
-            {{- if not $first }},{{ end }}
-            {{- $first = false }}
-            {
-                "type": "trionity",
-                "config": {
-                    "username": "{{ .connector_username_trionity }}",
-                    "password": "{{ .connector_password_trionity }}",
-                    "interval": {{ .connector_interval_trionity }},
-                    "spin": "{{ .connector_spin_trionity }}",
-                    "api_log_level": "{{ .api_log_level }}"
-                }
-            }
-            {{- end }}
         ],
         "plugins": [
             {
