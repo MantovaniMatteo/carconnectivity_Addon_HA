@@ -123,7 +123,7 @@ class CarConnectivityMQTTClient(Client):  # pylint: disable=too-many-instance-at
         self.on_subscribe = self._on_subscribe_callback
         self._on_subscribe_callbacks: Set[CallbackOnSubscribe] = set()
 
-        self.will_set(topic=f'{self.prefix}{self.plugin.connection_state.get_absolute_path}', qos=1, retain=True,
+        self.will_set(topic=f'{self.prefix}{self.plugin.connection_state.get_absolute_path()}', qos=1, retain=True,
                       payload=ConnectionState.DISCONNECTED.value)
 
     def add_on_connect_callback(self, callback: CallbackOnConnect) -> None:
@@ -325,7 +325,8 @@ class CarConnectivityMQTTClient(Client):  # pylint: disable=too-many-instance-at
         """
         try:
             self.plugin.connection_state._set_value(value=ConnectionState.DISCONNECTED)  # pylint: disable=protected-access
-            disconect_publish = self.publish(topic=f'{self.prefix}{self.plugin.connection_state.get_absolute_path}', qos=1, retain=True,
+            # absolutely make sure disconnected message is sent out by publishing it again and wait for publish
+            disconect_publish = self.publish(topic=f'{self.prefix}{self.plugin.connection_state.get_absolute_path()}', qos=1, retain=True,
                                              payload=ConnectionState.DISCONNECTED.value)
             disconect_publish.wait_for_publish()
         except RuntimeError:
