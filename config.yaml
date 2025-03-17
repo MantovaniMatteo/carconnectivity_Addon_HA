@@ -1,4 +1,4 @@
-name: "CarConnectivity Addon"
+name: "CarConnectivity Addon MM"
 version: "0.1.6"
 slug: "carconnectivity-addon"
 description: "Addon version of Carconnectivity made by Till (see https://github.com/tillsteinbach/CarConnectivity) throught MQTT"
