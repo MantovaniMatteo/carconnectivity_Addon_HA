@@ -17,7 +17,7 @@ ports:
 ports_description:
   4000/tcp: Carconnectivity web interface
 options:
-  connector_brand_seatcupra: "seat"
+  connector_brand_seatcupra: "cupra"
   connector_username_seatcupra: ""
   connector_password_seatcupra: "password"
   connector_spin_seatcupra: "1234"
