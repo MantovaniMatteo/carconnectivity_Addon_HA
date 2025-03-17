@@ -15,6 +15,14 @@
 
 # Home Assistant Add-on: CarConnectivity
 
+#VERSION:
+carconnectivity v0.5a4
+carconnectivity-cli v0.3 
+carconnectivity-plugin-webui v0.3a1
+connectivity-plugins-mqtt v0.4.2
+carconnectivity-connector-seatcupra v0.2a3
+carconnectivity-plugin-mqtt-homeassistant v0.2a5
+
 # CarConnectivity-Addon Configuration Guide
 
 ## Introduction
