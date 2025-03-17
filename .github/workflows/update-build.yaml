@@ -24,18 +24,6 @@ jobs:
           LATEST_SEAT_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-seatcupra.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
           echo "LATEST_SEAT_VERSION=$LATEST_SEAT_VERSION" >> $GITHUB_ENV
           
-          # SKODA
-          LATEST_SKODA_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-skoda.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
-          echo "LATEST_SKODA_VERSION=$LATEST_SKODA_VERSION" >> $GITHUB_ENV
-
-          # VOLKSWAGEN
-          LATEST_VW_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-volkswagen.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
-          echo "LATEST_VW_VERSION=$LATEST_VW_VERSION" >> $GITHUB_ENV
-
-          # TRONITY
-          LATEST_TRONITY_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-tronity.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
-          echo "LATEST_TRONITY_VERSION=$LATEST_TRONITY_VERSION" >> $GITHUB_ENV
-
           # MQTT
           LATEST_MQTT_VERSION=$(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt.git | awk '{print $2}' | grep -Eo 'v[0-9]+.[0-9]+.[0-9]+' | sort -V | tail -n 1)
           echo "LATEST_MQTT_VERSION=$LATEST_MQTT_VERSION" >> $GITHUB_ENV
@@ -49,9 +37,6 @@ jobs:
           echo "### Changelog des mises à jour" > changelog.md
           
           echo "- **SEAT_VERSION** → \`${LATEST_SEAT_VERSION}\`" >> changelog.md
-          echo "- **SKODA_VERSION** → \`${LATEST_SKODA_VERSION}\`" >> changelog.md
-          echo "- **VOLKSWAGEN_VERSION** → \`${LATEST_VW_VERSION}\`" >> changelog.md
-          echo "- **TRONITY_VERSION** → \`${LATEST_TRONITY_VERSION}\`" >> changelog.md
           echo "- **MQTT_VERSION** → \`${LATEST_MQTT_VERSION}\`" >> changelog.md
           echo "- **MQTT_HOMEASSISTANT_VERSION** → \`${LATEST_MQTT_HOMEASSISTANT_VERSION}\`" >> changelog.md
           echo "" >> changelog.md
@@ -61,15 +46,6 @@ jobs:
           # Génération des logs pour chaque sous-module
           echo "**SeatCupra** :" >> changelog.md
           git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-seatcupra.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
-
-          echo "**Skoda** :" >> changelog.md
-          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-skoda.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
-
-          echo "**Volkswagen** :" >> changelog.md
-          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-volkswagen.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
-
-          echo "**Tronity** :" >> changelog.md
-          git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-connector-tronity.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
 
           echo "**MQTT** :" >> changelog.md
           git log --pretty=format:"- %h %s" $(git ls-remote --tags https://github.com/tillsteinbach/CarConnectivity-plugin-mqtt.git | awk '{print $1}' | tail -n 2 | head -n 1)..HEAD >> changelog.md || echo "Pas de nouvelles modifications" >> changelog.md
@@ -81,9 +57,6 @@ jobs:
         run: |
           echo "Mise à jour de build.yaml avec les nouvelles versions"
           sed -i "s/SEAT_VERSION: .*/SEAT_VERSION: \"${LATEST_SEAT_VERSION}\"/" build.yaml
-          sed -i "s/SKODA_VERSION: .*/SKODA_VERSION: \"${LATEST_SKODA_VERSION}\"/" build.yaml
-          sed -i "s/VW_VERSION: .*/VW_VERSION: \"${LATEST_VW_VERSION}\"/" build.yaml
-          sed -i "s/TRONITY_VERSION: .*/TRONITY_VERSION: \"${LATEST_TRONITY_VERSION}\"/" build.yaml
           sed -i "s/MQTT_VERSION: .*/MQTT_VERSION: \"${LATEST_MQTT_VERSION}\"/" build.yaml
           sed -i "s/MQTT_HOMEASSISTANT_VERSION: .*/MQTT_HOMEASSISTANT_VERSION: \"${LATEST_MQTT_HOMEASSISTANT_VERSION}\"/" build.yaml
 
@@ -104,9 +77,6 @@ jobs:
             Automatiquement généré par GitHub Actions.
 
             - **SEAT_VERSION** → `${LATEST_SEAT_VERSION}`
-            - **SKODA_VERSION** → `${LATEST_SKODA_VERSION}`
-            - **VW_VERSION** → `${LATEST_VW_VERSION}`
-            - **TRONITY_VERSION** → `${LATEST_TRONITY_VERSION}`
             - **MQTT_VERSION** → `${LATEST_MQTT_VERSION}`
             - **MQTT_HOMEASSISTANT_VERSION** → `${LATEST_MQTT_HOMEASSISTANT_VERSION}`
 
