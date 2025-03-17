@@ -32,9 +32,6 @@ Only fill in the settings for the brands of vehicles you own. **Leave all other 
 ### 1. Selecting Your Vehicle Brand
 Choose the manufacturer corresponding to your vehicle from the supported brands:
 - **Seat/Cupra**
-- **Skoda**
-- **Volkswagen**
-- **Tronity**
 
 If you own multiple vehicles from different brands, you can configure multiple sections.
 
